@@ -37,5 +37,5 @@ python3 -m venv venv
 
 echo 'source /home/ubuntu/vllm/venv/bin/activate' >> ~/.bashrc
 source /home/ubuntu/vllm/venv/bin/activate
-sudo pip install vllm
+pip install vllm
 EOF
