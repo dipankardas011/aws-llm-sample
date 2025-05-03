@@ -28,21 +28,38 @@ module "aws_ami" {
 }
 
 module "aws_vm" {
+  count      = length(var.custom_ami_id) > 0 ? 0 : 1
   depends_on = [module.aws_network, module.github_ssh_key, module.aws_security]
-  source     = "./modules/vm-aws-ami"
+  source     = "modules/independent-vm"
 
-  workload_name               = var.workload_name
-  instance_type               = var.instance_type
-  instance_count              = 1
-  ami_id                      = length(var.custom_ami_id) > 0 ? var.custom_ami_id : module.aws_ami[0].ami_id
-  custom_ami_contains_ssh_key = length(var.custom_ami_id) > 0 ? true : false # custom AMI when used will contain ssh key
-  key_name                    = ""
-  subnet_id                   = module.aws_network.private_subnet_id
-  security_group_ids          = [module.aws_security.security_group_id]
-  instance_category           = "on-demand"
-  ebs_size                    = 100
+  workload_name      = var.workload_name
+  instance_type      = var.instance_type
+  instance_count     = 1
+  ami_id             = module.aws_ami[0].ami_id
+  key_name           = module.github_ssh_key.public_ssh_key
+  subnet_id          = module.aws_network.private_subnet_id
+  security_group_ids = [module.aws_security.security_group_id]
+  instance_category  = "on-demand"
+  ebs_size           = 100
 }
 
 output "instances_detail" {
-  value = module.aws_vm.instance_details
+  value = length(module.aws_vm) > 0 ? module.aws_vm.instance_details : null
+}
+
+module "aws_asg_vm" {
+  count      = length(var.custom_ami_id) > 0 ? 1 : 0
+  depends_on = [module.aws_network, module.aws_security]
+  source     = "./modules/asg-vm"
+
+  workload_name     = var.workload_name
+  instance_type     = var.instance_type
+  ami_id            = var.custom_ami_id
+  region            = var.aws_region
+  subnet_ids        = [module.aws_network.private_subnet_id]
+  security_group_id = module.aws_security.security_group_id
+}
+
+output "asg_id" {
+  value = length(module.aws_asg_vm) > 0 ? module.aws_asg_vm.asg_id : null
 }

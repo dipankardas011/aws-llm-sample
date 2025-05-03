@@ -49,7 +49,3 @@ variable "ebs_size" {
   type        = number
   default     = 120
 }
-
-variable "custom_ami_contains_ssh_key" {
-  type = bool
-}

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cat <<EOF > ~/vllm_config.sh
+vllm serve ${model} --host=0.0.0.0 --port=${port}
+EOF
+
+nohup bash ~/vllm_config.sh > ~/vllm.log 2>&1 &

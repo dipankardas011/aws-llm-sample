@@ -13,8 +13,13 @@ variable "region" {
 }
 
 variable "instance_type" {
-    type    = string
-    default = "g5.2xlarge"
+  type    = string
+  default = "g5.2xlarge"
+}
+
+variable "ebs_size" {
+  type    = number
+  default = 100
 }
 
 locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
@@ -24,6 +29,14 @@ source "amazon-ebs" "gg" {
   ami_name      = "qwen-instance-${local.timestamp}"
   instance_type = var.instance_type
   region        = var.region
+  ami_block_device_mappings {
+    device_name = "/dev/sda1"
+    encrypted = true
+    volume_size = var.ebs_size
+    volume_type           = "gp3"
+    delete_on_termination = true
+  }
+
   source_ami_filter {
     filters = {
       name                = "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server*"
@@ -34,6 +47,7 @@ source "amazon-ebs" "gg" {
     most_recent = true
     owners      = ["099720109477"]
   }
+
   ssh_username = "ubuntu"
 }
 

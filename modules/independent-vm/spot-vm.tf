@@ -1,14 +1,9 @@
 resource "aws_spot_instance_request" "ubuntu_server" {
   count = var.instance_category == "spot" ? var.instance_count : 0
 
-  ami           = var.ami_id
-  instance_type = var.instance_type
-  dynamic "key_name" {
-    for_each = var.custom_ami_contains_ssh_key ? [] : [1]
-    content {
-      key_name = var.key_name
-    }
-  }
+  ami                    = var.ami_id
+  instance_type          = var.instance_type
+  key_name               = var.key_name
   subnet_id              = var.subnet_id
   vpc_security_group_ids = var.security_group_ids
   spot_type              = "persistent"
@@ -30,7 +25,6 @@ resource "aws_spot_instance_request" "ubuntu_server" {
     encrypted             = true
   }
 
-  user_data = var.user_data
 }
 
 
