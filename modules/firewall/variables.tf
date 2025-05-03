@@ -8,11 +8,6 @@ variable "region" {
   description = "AWS region to deploy the resources"
 }
 
-variable "ssh_key_public" {
-  type        = string
-  description = "Public SSH key for EC2 instances"
-}
-
 variable "vpc_id" {
   type        = string
   description = "VPC ID where the security group will be created"

@@ -8,8 +8,7 @@ variable "region" {
   description = "AWS region to deploy the resources"
 }
 
-variable "vpc_cidr" {
+variable "ssh_key_public" {
   type        = string
-  description = "CIDR block for the VPC"
-  default     = "10.0.0.0/16"
+  description = "Public SSH key for EC2 instances"
 }

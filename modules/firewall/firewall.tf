@@ -1,6 +1,5 @@
 locals {
   instance_firewall_name = "${var.workload_name}-${var.region}-fw"
-  ssh_key_name           = "${var.workload_name}-${var.region}-ssh-key"
 }
 
 resource "aws_security_group" "allow_traffic" {

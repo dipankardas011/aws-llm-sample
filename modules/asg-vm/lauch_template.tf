@@ -28,7 +28,7 @@ resource "aws_launch_template" "launch_templ" {
     instance_metadata_tags      = "enabled"
   }
 
-  user_data = base64encode(templatefile("${path.module}/run_llm.tfpl", {
+  user_data = base64encode(templatefile("${path.module}/run_llm.tftpl", {
     model = "Qwen/Qwen3-8B",
     port  = 80,
   }))

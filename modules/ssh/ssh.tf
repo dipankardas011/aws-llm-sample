@@ -1,5 +1,5 @@
 resource "aws_key_pair" "deployer" {
-  key_name   = local.ssh_key_name
+  key_name   = "${var.workload_name}-${var.region}-ssh-key"
   public_key = var.ssh_key_public
 }
 

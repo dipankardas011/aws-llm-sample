@@ -27,6 +27,9 @@ resource "aws_autoscaling_group" "bar" {
   }
 }
 
-output "asg_id" {
-  value = aws_autoscaling_group.bar.id
+output "asg_details" {
+  value = {
+    id   = aws_autoscaling_group.bar.id
+    name = aws_autoscaling_group.bar.name
+  }
 }

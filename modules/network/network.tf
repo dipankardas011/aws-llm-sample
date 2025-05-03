@@ -1,13 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-  }
-
-  required_version = ">= 1.0.0"
-}
 
 locals {
   vpc_name                 = "${var.workload_name}-${var.region}-vpc"
@@ -28,9 +18,14 @@ resource "aws_vpc" "main" {
   }
 }
 
+locals {
+  public_cidr  = cidrsubnet(var.vpc_cidr, 1, 0)
+  private_cidr = cidrsubnet(var.vpc_cidr, 1, 1)
+}
+
 resource "aws_subnet" "public" {
   vpc_id     = aws_vpc.main.id
-  cidr_block = var.subnets_cidr["public"]
+  cidr_block = local.public_cidr
   tags = {
     Name = local.public_subnet_name
   }
@@ -38,7 +33,7 @@ resource "aws_subnet" "public" {
 
 resource "aws_subnet" "private" {
   vpc_id     = aws_vpc.main.id
-  cidr_block = var.subnets_cidr["private"]
+  cidr_block = local.private_cidr
   tags = {
     Name = local.private_subnet_name
   }
