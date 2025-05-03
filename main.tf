@@ -61,16 +61,21 @@ module "aws_asg_vm" {
   depends_on = [module.aws_network, module.aws_firewall]
   source     = "./modules/asg-vm"
 
+  sg_max_instances  = var.asg_max_instances
   workload_name     = var.workload_name
   instance_type     = var.instance_type
   ami_id            = var.custom_ami_id
   region            = var.aws_region
   subnet_ids        = [module.aws_network.private_subnet_id]
   security_group_id = module.aws_firewall.security_group_id
+  model = {
+    name = "Qwen/Qwen3-8B"
+    port = 80
+  }
 }
 
 output "asg_details" {
-  value = length(module.aws_asg_vm) > 0 ? module.aws_asg_vm.asg_details : null
+  value = length(module.aws_asg_vm) > 0 ? module.aws_asg_vm[0].asg_details : null
 }
 
 module "aws_lb_firewall" {
@@ -136,7 +141,7 @@ module "aws_privatelink" {
   region             = var.aws_region
   vpc_id             = module.aws_network.vpc_id
   alternate_dns_name = var.vpc_endpointservice_alternate_dns_name
-  nlb_arn            = module.aws_lb[0].lb_arn
+  nlb_arn            = module.aws_lb[0].lb_arn.arn
   supported_regions  = [var.aws_region]
 }
 

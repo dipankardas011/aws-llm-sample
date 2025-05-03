@@ -29,8 +29,8 @@ resource "aws_launch_template" "launch_templ" {
   }
 
   user_data = base64encode(templatefile("${path.module}/run_llm.tftpl", {
-    model = "Qwen/Qwen3-8B",
-    port  = 80,
+    model = var.model.name
+    port  = var.model.port,
   }))
 }
 

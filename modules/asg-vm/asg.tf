@@ -1,6 +1,6 @@
 resource "aws_autoscaling_group" "bar" {
   desired_capacity = 1
-  max_size         = 3
+  max_size         = var.sg_max_instances
   min_size         = 1
   name             = local.asg_name
 

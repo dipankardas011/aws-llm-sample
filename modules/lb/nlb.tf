@@ -15,7 +15,7 @@ resource "aws_lb_target_group" "lb-tg" {
     interval            = 60
     protocol            = var.application_healthcheck_config.protocol
     port                = var.application_healthcheck_config.port
-    path                = var.application_healthcheck_config.path
+    path                = var.application_healthcheck_config.path == "" ? null : var.application_healthcheck_config.path
     unhealthy_threshold = 3
   }
 }

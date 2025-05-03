@@ -30,3 +30,16 @@ variable "security_group_id" {
   type        = string
 }
 
+variable "sg_max_instances" {
+  description = "Maximum number of instances in the ASG"
+  type        = number
+  default     = 5
+}
+
+variable "model" {
+  type = object({
+    name = string
+    port = number
+  })
+  description = "LLM Model configuration for the ASG instances"
+}
