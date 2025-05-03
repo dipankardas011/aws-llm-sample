@@ -15,7 +15,7 @@ variable "workload_name" {
 
 variable "custom_ami_id" {
   type    = string
-  default = "ami-03de89ae8f497f89e"
+  default = "ami-9999999"
 }
 
 variable "asg_max_instances" {
