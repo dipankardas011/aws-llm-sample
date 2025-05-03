@@ -6,10 +6,9 @@ sudo apt-get update -y
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade
 sudo apt-get update
 sudo apt-get -y -qq install curl wget git vim apt-transport-https ca-certificates
-sudo apt install -y ubuntu-drivers-common
+sudo apt install -y ubuntu-drivers-common python3.12-venv python3-pip
 sudo ubuntu-drivers autoinstall
 sudo apt install -y nvidia-cuda-toolkit
-sudo apt install python3 python3.12-venv python3-pip -y
 
 # Setup sudo to allow no-password sudo for "hashicorp" group and adding "terraform" user
 sudo groupadd -r hashicorp
@@ -26,11 +25,17 @@ sudo chmod 600 /home/terraform/.ssh/authorized_keys
 sudo chown -R terraform /home/terraform/.ssh
 sudo usermod --shell /bin/bash terraform
 
-sudo -H -i -u terraform -- env bash << EOF
+sudo -H -i -u ubuntu -- env bash << EOF
 whoami
-echo ~terraform
+echo ~ubuntu
 
-cd /home/terraform
+cd /home/ubuntu
 
-sudo pip install vllm --break-system-packages
+mkdir -p vllm && cd vllm
+
+python3 -m venv venv
+
+echo 'source /home/ubuntu/vllm/venv/bin/activate' >> ~/.bashrc
+source /home/ubuntu/vllm/venv/bin/activate
+sudo pip install vllm
 EOF
