@@ -23,7 +23,7 @@ module "aws_security" {
 }
 
 module "aws_ami" {
-  count = length(var.custom_ami_id) > 0 ? 0 : 1
+  count  = length(var.custom_ami_id) > 0 ? 0 : 1
   source = "./modules/machine_image"
 }
 
@@ -31,16 +31,16 @@ module "aws_vm" {
   depends_on = [module.aws_network, module.github_ssh_key, module.aws_security]
   source     = "./modules/vm-aws-ami"
 
-  workload_name      = var.workload_name
-  instance_type      = var.instance_type
-  instance_count     = 1
-  ami_id             = length(var.custom_ami_id) > 0 ? var.custom_ami_id : module.aws_ami[0].ami_id
+  workload_name               = var.workload_name
+  instance_type               = var.instance_type
+  instance_count              = 1
+  ami_id                      = length(var.custom_ami_id) > 0 ? var.custom_ami_id : module.aws_ami[0].ami_id
   custom_ami_contains_ssh_key = length(var.custom_ami_id) > 0 ? true : false # custom AMI when used will contain ssh key
-  key_name = ""
-  subnet_id          = module.aws_network.private_subnet_id
-  security_group_ids = [module.aws_security.security_group_id]
-  instance_category  = "on-demand"
-  ebs_size           = 100
+  key_name                    = ""
+  subnet_id                   = module.aws_network.private_subnet_id
+  security_group_ids          = [module.aws_security.security_group_id]
+  instance_category           = "on-demand"
+  ebs_size                    = 100
 }
 
 output "instances_detail" {

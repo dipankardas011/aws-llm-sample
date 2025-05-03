@@ -51,5 +51,5 @@ variable "ebs_size" {
 }
 
 variable "custom_ami_contains_ssh_key" {
-  type       = bool
+  type = bool
 }

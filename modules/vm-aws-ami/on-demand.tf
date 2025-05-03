@@ -2,8 +2,8 @@
 resource "aws_instance" "ubuntu_server" {
   count = var.instance_category == "on-demand" ? var.instance_count : 0
 
-  ami                    = var.ami_id
-  instance_type          = var.instance_type
+  ami           = var.ami_id
+  instance_type = var.instance_type
 
   dynamic "key_name" {
     for_each = var.custom_ami_contains_ssh_key ? [] : [1]
